@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+venv/
+
+# Build output
+dist/
+frontend/dist/
+admin/dist/
+
+# Environment variables - NEVER commit these
+.env
+backend/.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Key files - NEVER commit these
+*.pem
+
+# OS files
+.DS_Store

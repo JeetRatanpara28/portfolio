@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Root ─────────────────────────────────────────── */
+:root {
+  --cyan:   #64DCFF;
+  --violet: #8B5CF6;
+  --bg:     #050A14;
+  --bg2:    #0A1628;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: #e2e8f0;
+}
+
+/* ─── Glassmorphism utilities ───────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ─── Glow effects ──────────────────────────────────── */
+.glow-cyan {
+  box-shadow:
+    0 0 20px rgba(100, 220, 255, 0.12),
+    0 0 60px rgba(100, 220, 255, 0.04);
+}
+
+.glow-cyan-sm {
+  box-shadow: 0 0 12px rgba(100, 220, 255, 0.25);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 24px rgba(100, 220, 255, 0.5);
+}
+
+/* ─── Custom scrollbar ──────────────────────────────── */
+.scroll-panel {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 220, 255, 0.2) transparent;
+}
+
+.scroll-panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-panel::-webkit-scrollbar-thumb {
+  background: rgba(100, 220, 255, 0.2);
+  border-radius: 2px;
+}
+
+.scroll-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 220, 255, 0.4);
+}
+
+/* ─── Section heading underline ─────────────────────── */
+.section-heading::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+  margin-top: 8px;
+}
+
+/* ─── Tech tag ──────────────────────────────────────── */
+.tech-tag {
+  background: rgba(100, 220, 255, 0.08);
+  border: 1px solid rgba(100, 220, 255, 0.2);
+  color: var(--cyan);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 2px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+
+/* ─── Gradient text ─────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Skill bar track ───────────────────────────────── */
+.skill-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* ─── Input fields ──────────────────────────────────── */
+.field {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #e2e8f0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: none;
+}
+
+.field::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.field:focus {
+  border-color: rgba(100, 220, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(100, 220, 255, 0.06);
+}
+
+/* ─── Button ────────────────────────────────────────── */
+.btn-primary {
+  background: linear-gradient(135deg, rgba(100,220,255,0.15) 0%, rgba(139,92,246,0.15) 100%);
+  border: 1px solid rgba(100, 220, 255, 0.3);
+  color: var(--cyan);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 12px 32px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, rgba(100,220,255,0.25) 0%, rgba(139,92,246,0.25) 100%);
+  box-shadow: 0 0 24px rgba(100, 220, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
