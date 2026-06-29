@@ -1,0 +1,36 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: DATABASE_URL,SECRET_KEY,ALLOWED_ORIGINS,SMTP_USER,SMTP_PASS,SMTP_TO
+          script: |
+            cd ~/portfolio
+            git pull
+            cat > backend/.env << EOF
+            DATABASE_URL=postgresql://postgres.bxtsjohujoikhmycrlwj:ASF5AhQcyfj+KQ4@aws-0-eu-west-3.pooler.supabase.com:5432/postgres
+            SECRET_KEY=3936710a17aae95b37ca76cb02e9b0c1aa58d348fc6d2435aa4790f17e7cd26c
+            ALLOWED_ORIGINS=http://52.47.201.215:8000
+            SMTP_HOST=smtp.gmail.com
+            SMTP_PORT=587
+            SMTP_SSL=false 
+            SMTP_USER=jeetratanpara1525@gmail.com
+            SMTP_PASS=bhky qbjq ehdk ymlf
+            SMTP_TO=jeetratanpara1525@gmail.com
+            EOF
+            docker-compose up -d --build
