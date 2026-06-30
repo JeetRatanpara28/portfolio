@@ -108,6 +108,11 @@ async def health():
 
 # ── Serve built frontend in production ──────────────────
 static_dir = Path(__file__).parent.parent / "frontend" / "dist"
+admin_dir  = Path(__file__).parent.parent / "admin" / "dist"
+
+if admin_dir.exists():
+    app.mount("/admin/assets", StaticFiles(directory=admin_dir / "assets"), name="admin-assets")
+
 if static_dir.exists():
     app.mount("/assets", StaticFiles(directory=static_dir / "assets"), name="assets")
 
@@ -116,6 +121,8 @@ if static_dir.exists():
         if full_path.startswith("api/") or full_path == "api":
             from fastapi import HTTPException
             raise HTTPException(status_code=404, detail="Not found")
+        if full_path.startswith("admin") and admin_dir.exists():
+            return FileResponse(admin_dir / "index.html")
         return FileResponse(static_dir / "index.html")
 
 if __name__ == "__main__":
