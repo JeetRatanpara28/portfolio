@@ -23,14 +23,14 @@ jobs:
             cd ~/portfolio
             git pull
             cat > backend/.env << EOF
-            DATABASE_URL=postgresql://postgres.bxtsjohujoikhmycrlwj:ASF5AhQcyfj+KQ4@aws-0-eu-west-3.pooler.supabase.com:5432/postgres
-            SECRET_KEY=3936710a17aae95b37ca76cb02e9b0c1aa58d348fc6d2435aa4790f17e7cd26c
-            ALLOWED_ORIGINS=http://52.47.201.215:8000
+            DATABASE_URL=$DATABASE_URL
+            SECRET_KEY=$SECRET_KEY
+            ALLOWED_ORIGINS=$ALLOWED_ORIGINS
             SMTP_HOST=smtp.gmail.com
             SMTP_PORT=587
-            SMTP_SSL=false 
-            SMTP_USER=jeetratanpara1525@gmail.com
-            SMTP_PASS=bhky qbjq ehdk ymlf
-            SMTP_TO=jeetratanpara1525@gmail.com
+            SMTP_SSL=false
+            SMTP_USER=$SMTP_USER
+            SMTP_PASS=$SMTP_PASS
+            SMTP_TO=$SMTP_TO
             EOF
-            docker-compose up -d --build
+            docker compose up -d --build
