@@ -12,8 +12,9 @@ import BiometricSetup from '@/pages/BiometricSetup'
 import Settings from '@/pages/Settings'
 
 export default function App() {
+  const basename = import.meta.env.PROD ? '/admin' : '/'
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<Layout />}>
