@@ -173,21 +173,19 @@ export const skillGroups = [
 
 export const projects = [
   {
-    // TODO: CONFIRM AgriSense validation method — the last sentence of the description says the
-    // accuracy figures come from "a held-out test set". Edit it here AND in the admin if that is wrong.
     "id": 1,
     "title": "AgriSense AI",
-    "description": "AI-powered agricultural advisory platform for South Asian smallholder farmers. Features real-time pest risk assessment (Random Forest, 86.59% accuracy), irrigation recommendations (XGBoost, 99.78% accuracy), and crop advisory via FastAPI REST endpoints. Trained on 36,162 rows of NASA POWER weather data. Deployed on AWS EC2 with Docker and GitHub Actions CI/CD. Accuracy figures are evaluated on a held-out test set.",
+    "description": "Team project (4 people): AI advisory platform for smallholder farmers, with pest risk assessment, irrigation recommendations and crop advice served through FastAPI. My part: the Next.js admin site, the AI chatbot integration (Hugging Face), and the DevOps: Docker images, a GitHub Actions CI/CD pipeline, and deployment on AWS (EC2, ECR, RDS PostgreSQL). The ML models (Random Forest, XGBoost) were built by my teammates.",
     "tech": [
-      "Python",
+      "Next.js",
       "FastAPI",
       "PostgreSQL",
-      "Scikit-learn",
-      "XGBoost",
-      "TensorFlow",
       "Docker",
+      "GitHub Actions",
       "AWS EC2",
-      "NASA POWER API"
+      "AWS ECR",
+      "AWS RDS",
+      "Hugging Face"
     ],
     "github_url": "https://github.com/Tejaswini3107/agrisenseai.git",
     "live_url": "",
@@ -197,28 +195,24 @@ export const projects = [
     "sort_order": 1
   },
   {
-    // TODO: CONFIRM CIA DESCRIPTION — content intentionally unchanged until the final text is provided.
     "id": 2,
-    "title": "CIA — Inventory Management Platform",
-    "description": "Full-stack inventory management platform with Node.js/Express/TypeScript REST API featuring JWT auth, bcrypt hashing, and role-based access control. React/Redux/TypeScript frontend. Production-grade security with rate limiting, Helmet headers, and CORS. Docker Compose orchestration with CI/CD pipeline pushing to AWS ECR and deploying to EC2.",
+    "title": "CIA — Linux Infrastructure Security Audit",
+    "description": "Epitech team project (3 people, May 2026). We audited 4 Linux CentOS servers, found 11 vulnerabilities, ranked them by risk and fixed them: access rights, updates, unnecessary services and server hardening. We documented every fix and set up a CI/CD pipeline so that updates and fixes are deployed in a controlled way.",
     "tech": [
-      "Node.js",
-      "Express",
-      "TypeScript",
-      "React",
-      "Redux",
-      "MySQL",
-      "TypeORM",
-      "JWT",
+      "Linux",
+      "CentOS",
+      "Bash",
+      "Security Audit",
+      "Hardening",
+      "Vulnerability Management",
+      "CI/CD",
       "Docker",
-      "GitHub Actions",
-      "AWS ECR",
-      "EC2"
+      "GitHub Actions"
     ],
     "github_url": "https://github.com/JeetRatanpara28/cia-epitech.git",
     "live_url": "",
     "accent": "#64DCFF",
-    "label": "Featured",
+    "label": "SECURITY",
     "featured": true,
     "sort_order": 2
   },
