@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ThreeScene from "./ThreeScene";
 import { getProfile, BASE_URL } from "../lib/api";
 
-const NAV = [
+export const NAV = [
   { id: "about",    label: "About"    },
   { id: "skills",   label: "Skills"   },
   { id: "projects", label: "Projects" },
@@ -100,12 +100,12 @@ export default function LeftPanel({ activeSection, onNavClick }) {
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050A14]/30 via-transparent to-[#050A14]/50" />
 
       {/* Profile card */}
-      <div className="absolute inset-0 flex items-center justify-center p-6">
+      <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.92, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="glass-strong glow-cyan rounded-3xl p-7 w-full max-w-[290px] text-center"
+          className="glass-strong glow-cyan rounded-3xl p-6 sm:p-7 w-full max-w-[320px] sm:max-w-[360px] lg:max-w-[290px] text-center"
         >
           {/* Avatar */}
           <div className="relative mx-auto mb-5 w-[72px] h-[72px]">
@@ -126,15 +126,15 @@ export default function LeftPanel({ activeSection, onNavClick }) {
           </p>
 
           {/* Location & status */}
-          <p className="text-slate-500 text-xs mb-5 leading-relaxed">
+          <p className="text-slate-500 text-xs mb-4 lg:mb-5 leading-relaxed">
             {profile?.location || "Rajkot, India"} · {profile?.status || "Open to work"}
           </p>
 
           {/* Divider */}
           <div className="w-full h-px bg-white/8 mb-4" />
 
-          {/* Navigation */}
-          <nav className="space-y-0.5 mb-4">
+          {/* Navigation — desktop only; phones/tablets use the sticky top bar */}
+          <nav className="hidden lg:block space-y-0.5 mb-4">
             {NAV.map((item) => {
               const active = activeSection === item.id;
               return (
@@ -167,24 +167,24 @@ export default function LeftPanel({ activeSection, onNavClick }) {
           </nav>
 
           {/* Divider */}
-          <div className="w-full h-px bg-white/8 mb-4" />
+          <div className="hidden lg:block w-full h-px bg-white/8 mb-4" />
 
           {/* Social links */}
           <div className="flex items-center justify-center gap-2">
             <a href={profile?.github || "#"} target="_blank" rel="noopener noreferrer" title="GitHub"
-              className="w-9 h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
+              className="w-11 h-11 lg:w-9 lg:h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
               <GithubIcon />
             </a>
             <a href={profile?.linkedin || "#"} target="_blank" rel="noopener noreferrer" title="LinkedIn"
-              className="w-9 h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
+              className="w-11 h-11 lg:w-9 lg:h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
               <LinkedinIcon />
             </a>
             <a href={profile?.twitter || "#"} target="_blank" rel="noopener noreferrer" title="Twitter / X"
-              className="w-9 h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
+              className="w-11 h-11 lg:w-9 lg:h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
               <TwitterIcon />
             </a>
             <button onClick={copyEmail} title="Copy email"
-              className="w-9 h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
+              className="w-11 h-11 lg:w-9 lg:h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
               <EmailIcon />
             </button>
           </div>

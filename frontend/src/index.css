@@ -20,11 +20,24 @@ html,
 body,
 #root {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
   background: var(--bg);
   font-family: 'DM Sans', sans-serif;
   color: #e2e8f0;
+}
+
+/* Phones & tablets: the whole page scrolls. Never allow sideways scrolling. */
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; }
+
+/* Desktop (lg+): fixed split layout, only the right panel scrolls */
+@media (min-width: 1024px) {
+  html, body, #root { height: 100%; overflow: hidden; }
+}
+
+/* Anchor jumps on small screens must clear the sticky top bar */
+@media (max-width: 1023px) {
+  section[id] { scroll-margin-top: 3.25rem; }
 }
 
 /* ─── Glassmorphism utilities ───────────────────────── */

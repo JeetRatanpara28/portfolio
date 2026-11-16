@@ -77,15 +77,15 @@ export default function Profile() {
 
   return (
     <div>
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl font-bold text-foreground">Profile</h1>
         <p className="text-sm text-muted-foreground mt-1">Your public portfolio identity</p>
       </div>
 
       <form onSubmit={save} className="space-y-6">
-        <div className="bg-card border border-border rounded-xl p-6 space-y-5">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-6 space-y-5">
           <h2 className="font-semibold text-sm text-foreground">Basic Info</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Full Name">
               <input className={inputCls} value={form.name} onChange={e => set('name', e.target.value)} placeholder="Jeetkumar Ratanpara" />
             </Field>
@@ -104,7 +104,7 @@ export default function Profile() {
           </Field>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-6 space-y-4">
           <h2 className="font-semibold text-sm text-foreground">Resume PDF</h2>
           <p className="text-xs text-muted-foreground">Upload your resume — it will be served directly from your server, no Google Drive needed.</p>
 
@@ -126,7 +126,7 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-6 space-y-4">
           <h2 className="font-semibold text-sm text-foreground">Social Links</h2>
           <div className="grid grid-cols-1 gap-4">
             <Field label="GitHub URL">
@@ -141,7 +141,7 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-6 space-y-4">
           <h2 className="font-semibold text-sm text-foreground">Typewriter Titles</h2>
           <p className="text-xs text-muted-foreground">These cycle in the animated typewriter on your portfolio.</p>
 

@@ -40,7 +40,7 @@ export default function Certifications() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 sm:mb-8">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Certifications</h1>
           <p className="text-sm text-muted-foreground mt-1">{items.length} certifications</p>
@@ -53,7 +53,7 @@ export default function Certifications() {
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {items.map(x => (
-          <div key={x.id} className="bg-card border border-border rounded-xl px-5 py-4 flex gap-3">
+          <div key={x.id} className="bg-card border border-border rounded-xl px-4 sm:px-5 py-4 flex gap-3">
             <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
               <Award size={17} className="text-primary" />
             </div>
@@ -80,8 +80,8 @@ export default function Certifications() {
               </div>
             </div>
             <div className="flex flex-col gap-1.5 flex-shrink-0">
-              <button onClick={() => openEdit(x)} className="text-muted-foreground hover:text-foreground transition-colors"><Pencil size={14} /></button>
-              <button onClick={() => del(x.id)} className="text-muted-foreground hover:text-destructive transition-colors"><Trash2 size={14} /></button>
+              <button onClick={() => openEdit(x)} className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"><Pencil size={14} /></button>
+              <button onClick={() => del(x.id)} className="p-1.5 text-muted-foreground hover:text-destructive transition-colors"><Trash2 size={14} /></button>
             </div>
           </div>
         ))}
@@ -92,7 +92,7 @@ export default function Certifications() {
           <Field label="Certificate Name">
             <input className={inputCls} value={form.name || ''} onChange={e => set('name', e.target.value)} placeholder="AWS Certified Solutions Architect" required />
           </Field>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Issuing Organization">
               <input className={inputCls} value={form.issuer || ''} onChange={e => set('issuer', e.target.value)} placeholder="Amazon Web Services" />
             </Field>

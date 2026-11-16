@@ -1,32 +1,31 @@
 import { useState, useRef, useCallback } from 'react'
 import LeftPanel from './components/LeftPanel'
 import RightPanel from './components/RightPanel'
+import MobileNav from './components/MobileNav'
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('about')
   const rightPanelRef = useRef(null)
 
+  // Works in both layouts: scrolls the right panel on desktop, the page on phones/tablets
   const scrollToSection = useCallback((id) => {
-    const el = document.getElementById(id)
-    if (el && rightPanelRef.current) {
-      rightPanelRef.current.scrollTo({
-        top: el.offsetTop,
-        behavior: 'smooth',
-      })
-    }
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
   return (
-    <div className="flex flex-col lg:flex-row w-screen h-screen overflow-hidden bg-[#050A14]">
-      {/* ── Left panel — 42% on lg+, 45vh on mobile ── */}
-      <div className="w-full h-[45vh] lg:w-[42%] lg:h-full flex-shrink-0 relative">
+    <div className="flex flex-col lg:flex-row w-full min-h-[100svh] lg:h-screen lg:overflow-hidden bg-[#050A14]">
+      {/* Phones & tablets: sticky section bar */}
+      <MobileNav activeSection={activeSection} onNavClick={scrollToSection} />
+
+      {/* ── Left panel — hero on phones/tablets, 42% fixed column on desktop ── */}
+      <div className="w-full h-[calc(100svh-3.25rem)] min-h-[34rem] lg:w-[42%] lg:h-full lg:min-h-0 flex-shrink-0 relative">
         <LeftPanel activeSection={activeSection} onNavClick={scrollToSection} />
       </div>
 
-      {/* ── Right panel — scrollable ── */}
+      {/* ── Right panel — page flow on phones/tablets, own scroller on desktop ── */}
       <div
         ref={rightPanelRef}
-        className="flex-1 min-h-0 overflow-y-auto scroll-panel"
+        className="flex-1 min-w-0 lg:min-h-0 lg:overflow-y-auto scroll-panel"
       >
         <RightPanel
           panelRef={rightPanelRef}

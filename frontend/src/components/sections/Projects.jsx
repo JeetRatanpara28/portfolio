@@ -115,7 +115,7 @@ export default function Projects() {
   }, [])
 
   return (
-    <section id="projects" ref={ref} className="px-10 lg:px-14 py-12 border-t border-white/5">
+    <section id="projects" ref={ref} className="px-5 sm:px-8 lg:px-14 py-10 lg:py-12 border-t border-white/5">
       <motion.p
         variants={fadeUp} custom={0} initial="hidden" animate={inView ? 'visible' : 'hidden'}
         className="text-[#64DCFF] text-xs font-semibold tracking-[0.18em] uppercase mb-3 font-display"
@@ -127,7 +127,7 @@ export default function Projects() {
         variants={fadeUp} custom={1} initial="hidden" animate={inView ? 'visible' : 'hidden'}
         className="flex items-end justify-between mb-8"
       >
-        <h2 className="text-3xl lg:text-4xl font-bold font-display text-white section-heading">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-display text-white section-heading">
           Things I've built
         </h2>
         <a

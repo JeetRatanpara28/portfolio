@@ -41,7 +41,7 @@ export default function Experience() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 sm:mb-8">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Experience</h1>
           <p className="text-sm text-muted-foreground mt-1">{items.length} entries</p>
@@ -54,7 +54,7 @@ export default function Experience() {
 
       <div className="space-y-3">
         {items.map(x => (
-          <div key={x.id} className="bg-card border border-border rounded-xl px-5 py-4 flex gap-4">
+          <div key={x.id} className="bg-card border border-border rounded-xl px-4 sm:px-5 py-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
                 <h3 className="font-medium text-sm text-foreground">{x.role}</h3>
@@ -70,9 +70,9 @@ export default function Experience() {
               </div>
               {x.description && <p className="text-xs text-muted-foreground line-clamp-2">{x.description}</p>}
             </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <button onClick={() => openEdit(x)} className="text-muted-foreground hover:text-foreground transition-colors"><Pencil size={15} /></button>
-              <button onClick={() => del(x.id)} className="text-muted-foreground hover:text-destructive transition-colors"><Trash2 size={15} /></button>
+            <div className="flex items-center gap-3 sm:gap-2 flex-shrink-0 self-end sm:self-auto">
+              <button onClick={() => openEdit(x)} className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"><Pencil size={15} /></button>
+              <button onClick={() => del(x.id)} className="p-1.5 text-muted-foreground hover:text-destructive transition-colors"><Trash2 size={15} /></button>
             </div>
           </div>
         ))}
@@ -80,7 +80,7 @@ export default function Experience() {
 
       <Modal open={!!modal} onClose={() => setModal(null)} title={modal === 'new' ? 'New Experience' : 'Edit Experience'} size="lg">
         <form onSubmit={save} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Role / Title">
               <input className={inputCls} value={form.role || ''} onChange={e => set('role', e.target.value)} placeholder="Software Engineer" required />
             </Field>

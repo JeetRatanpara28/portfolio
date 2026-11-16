@@ -56,7 +56,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" ref={ref} className="px-10 lg:px-14 py-12 border-t border-white/5">
+    <section id="contact" ref={ref} className="px-5 sm:px-8 lg:px-14 py-10 lg:py-12 border-t border-white/5">
       {/* Label */}
       <motion.p
         variants={fadeUp} custom={0} initial="hidden" animate={inView ? 'visible' : 'hidden'}
@@ -67,7 +67,7 @@ export default function Contact() {
 
       <motion.h2
         variants={fadeUp} custom={1} initial="hidden" animate={inView ? 'visible' : 'hidden'}
-        className="text-3xl lg:text-4xl font-bold font-display text-white mb-3 section-heading"
+        className="text-2xl sm:text-3xl lg:text-4xl font-bold font-display text-white mb-3 section-heading"
       >
         Let's work together
       </motion.h2>
@@ -85,9 +85,9 @@ export default function Contact() {
         <motion.form
           variants={fadeUp} custom={3} initial="hidden" animate={inView ? 'visible' : 'hidden'}
           onSubmit={handleSubmit}
-          className="lg:col-span-3 glass rounded-2xl p-6 space-y-4"
+          className="lg:col-span-3 glass rounded-2xl p-4 sm:p-6 space-y-4"
         >
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-slate-500 text-xs font-medium font-display mb-1.5 block">
                 Name

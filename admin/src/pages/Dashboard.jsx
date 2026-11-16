@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react'
 import { api, BASE } from '@/lib/api'
 import { FolderKanban, Wrench, Briefcase, GraduationCap, Award, ExternalLink } from 'lucide-react'
 
+// Public site: override with VITE_SITE_URL; defaults to the live site in production builds
+const SITE_URL = import.meta.env.VITE_SITE_URL ||
+  (import.meta.env.PROD ? 'https://portfolio-site-rho-three-24.vercel.app' : 'http://localhost:3000')
+
 function StatCard({ icon: Icon, label, value, color }) {
   return (
-    <div className="bg-card border border-border rounded-xl p-5 flex items-center gap-4">
+    <div className="bg-card border border-border rounded-xl p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
       <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${color}`}>
         <Icon size={18} />
       </div>
@@ -39,7 +43,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
         <p className="text-sm text-muted-foreground mt-1">Overview of your portfolio content</p>
       </div>
@@ -55,9 +59,9 @@ export default function Dashboard() {
       <div className="bg-card border border-border rounded-xl p-5">
         <h2 className="font-semibold text-sm text-foreground mb-3">Quick links</h2>
         <div className="space-y-2">
-          <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer"
+          <a href={SITE_URL} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-blue-600 hover:underline">
-            <ExternalLink size={14} /> View portfolio (localhost:3000)
+            <ExternalLink size={14} /> View portfolio
           </a>
           <a href={`${BASE}/docs`} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-blue-600 hover:underline">

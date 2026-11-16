@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { registerDevice } from '@/lib/api'
 import {
   LayoutDashboard, User, Wrench, FolderKanban,
-  Briefcase, GraduationCap, Award, Fingerprint,
+  Briefcase, GraduationCap, Award, Fingerprint, X,
 } from 'lucide-react'
 
 const NAV = [
@@ -17,14 +17,35 @@ const NAV = [
   { to: '/certifications', icon: Award,           label: 'Certifications'  },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ open = false, onClose = () => {} }) {
   return (
-    <aside className="w-60 flex-shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border">
+    <>
+      {/* Backdrop for the mobile drawer */}
+      <div
+        onClick={onClose}
+        aria-hidden="true"
+        className={cn(
+          'lg:hidden fixed inset-0 z-40 bg-black/50 transition-opacity',
+          open ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        )}
+      />
+    <aside
+      className={cn(
+        'flex flex-col bg-sidebar border-r border-sidebar-border',
+        // phones & tablets: off-canvas drawer; desktop: fixed column
+        'fixed inset-y-0 left-0 z-50 w-64 max-w-[85vw] transition-transform duration-200',
+        open ? 'translate-x-0' : '-translate-x-full',
+        'lg:static lg:z-auto lg:w-60 lg:max-w-none lg:translate-x-0 lg:flex-shrink-0 lg:h-[100dvh]'
+      )}
+    >
       {/* Logo */}
-      <div className="h-14 flex items-center px-5 border-b border-sidebar-border">
+      <div className="h-14 flex items-center justify-between px-5 border-b border-sidebar-border">
         <span className="text-white font-bold text-sm tracking-tight">
           ⚡ Portfolio Admin
         </span>
+        <button onClick={onClose} aria-label="Close menu" className="lg:hidden p-1.5 -mr-1.5 text-sidebar-foreground/70 hover:text-white">
+          <X size={18} />
+        </button>
       </div>
 
       {/* Nav */}
@@ -36,7 +57,7 @@ export default function Sidebar() {
             end={to === '/'}
             className={({ isActive }) =>
               cn(
-                'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+                'flex items-center gap-3 px-3 py-2.5 lg:py-2 rounded-md text-sm transition-colors',
                 isActive
                   ? 'bg-sidebar-accent text-white font-medium'
                   : 'text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'
@@ -64,5 +85,6 @@ export default function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   )
 }

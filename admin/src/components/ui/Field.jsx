@@ -9,5 +9,5 @@ export function Field({ label, children, hint }) {
   )
 }
 
-export const inputCls = 'w-full border border-border rounded-lg px-3 py-2 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground/50'
+export const inputCls = 'w-full border border-border rounded-lg px-3 py-2 text-base sm:text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground/50'
 export const textareaCls = inputCls + ' resize-none'

@@ -46,7 +46,7 @@ export default function Projects() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 sm:mb-8">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Projects</h1>
           <p className="text-sm text-muted-foreground mt-1">{projects.length} projects total</p>
@@ -59,8 +59,8 @@ export default function Projects() {
 
       <div className="space-y-3">
         {projects.map(p => (
-          <div key={p.id} className="bg-card border border-border rounded-xl px-5 py-4 flex gap-4">
-            <div className="w-3 rounded-full flex-shrink-0 my-1" style={{ background: p.accent || '#64DCFF' }} />
+          <div key={p.id} className="bg-card border border-border rounded-xl px-4 sm:px-5 py-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="w-full h-1.5 sm:w-3 sm:h-auto rounded-full flex-shrink-0 sm:my-1" style={{ background: p.accent || '#64DCFF' }} />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="font-medium text-sm text-foreground truncate">{p.title}</h3>
@@ -74,11 +74,11 @@ export default function Projects() {
                 ))}
               </div>
             </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {p.github_url && <a href={p.github_url} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><Github size={15} /></a>}
-              {p.live_url && <a href={p.live_url} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors"><ExternalLink size={15} /></a>}
-              <button onClick={() => openEdit(p)} className="text-muted-foreground hover:text-foreground transition-colors ml-1"><Pencil size={15} /></button>
-              <button onClick={() => del(p.id)} className="text-muted-foreground hover:text-destructive transition-colors"><Trash2 size={15} /></button>
+            <div className="flex items-center gap-3 sm:gap-2 flex-shrink-0 self-end sm:self-auto">
+              {p.github_url && <a href={p.github_url} target="_blank" rel="noreferrer" className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"><Github size={15} /></a>}
+              {p.live_url && <a href={p.live_url} target="_blank" rel="noreferrer" className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"><ExternalLink size={15} /></a>}
+              <button onClick={() => openEdit(p)} className="p-1.5 text-muted-foreground hover:text-foreground transition-colors ml-1"><Pencil size={15} /></button>
+              <button onClick={() => del(p.id)} className="p-1.5 text-muted-foreground hover:text-destructive transition-colors"><Trash2 size={15} /></button>
             </div>
           </div>
         ))}
@@ -95,7 +95,7 @@ export default function Projects() {
           <Field label="Tech Stack" hint="Comma-separated: React, FastAPI, PostgreSQL">
             <input className={inputCls} value={techStr} onChange={e => setTechStr(e.target.value)} placeholder="React, FastAPI, PostgreSQL" />
           </Field>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="GitHub URL">
               <input className={inputCls} value={form.github_url || ''} onChange={e => set('github_url', e.target.value)} placeholder="https://github.com/…" />
             </Field>

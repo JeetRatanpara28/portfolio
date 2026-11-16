@@ -10,7 +10,7 @@ export default function About() {
   }, []);
 
   return (
-    <section id="about" className="mb-12">
+    <section id="about" className="px-5 sm:px-8 lg:px-14 pt-10 lg:pt-14 pb-10 lg:pb-12">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -22,12 +22,12 @@ export default function About() {
           About Me
         </h2>
 
-        <div className="glass-strong rounded-2xl p-6 space-y-4">
+        <div className="glass-strong rounded-2xl p-5 sm:p-6 space-y-4">
           <p className="text-slate-300 leading-relaxed text-sm">
             {profile?.bio || "Loading…"}
           </p>
 
-          <div className="grid grid-cols-2 gap-3 pt-2">
+          <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3 pt-2">
             <div className="glass rounded-xl p-4">
               <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Location</p>
               <p className="text-sm text-slate-200 font-medium">{profile?.location || "—"}</p>
@@ -38,7 +38,7 @@ export default function About() {
             </div>
             <div className="glass rounded-xl p-4">
               <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Email</p>
-              <p className="text-sm text-slate-200 font-medium truncate">{profile?.email || "—"}</p>
+              <p className="text-sm text-slate-200 font-medium break-all">{profile?.email || "—"}</p>
             </div>
             <div className="glass rounded-xl p-4">
               <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Focus</p>
