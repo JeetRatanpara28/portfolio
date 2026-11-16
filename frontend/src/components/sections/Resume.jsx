@@ -1,6 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { getExperience, getEducation, getCertifications, getProfile, BASE_URL } from "../../lib/api";
+import { BASE_URL } from "../../lib/api";
+import { useExperience, useEducation, useCertifications, useProfile } from "../../lib/store";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -84,17 +85,11 @@ export default function Resume() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
-  const [experience, setExperience] = useState([]);
-  const [education, setEducation]   = useState([]);
-  const [certs, setCerts]           = useState([]);
-  const [resumeUrl, setResumeUrl]   = useState(null);
-
-  useEffect(() => {
-    getExperience().then(setExperience).catch(() => {});
-    getEducation().then(setEducation).catch(() => {});
-    getCertifications().then(setCerts).catch(() => {});
-    getProfile().then(p => setResumeUrl(p?.resume_exists ? `${BASE_URL}/resume/download` : null)).catch(() => {});
-  }, []);
+  const experience = useExperience();
+  const education  = useEducation();
+  const certs      = useCertifications();
+  const profile    = useProfile();
+  const resumeUrl  = profile.resume_exists ? `${BASE_URL}/resume/download` : null;
 
   return (
     <section id="resume" ref={ref} className="px-5 sm:px-8 lg:px-14 py-10 lg:py-12 border-t border-white/5">

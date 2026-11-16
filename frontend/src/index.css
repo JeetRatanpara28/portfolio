@@ -124,12 +124,6 @@ body { overflow-x: hidden; }
 }
 
 /* ─── Skill bar track ───────────────────────────────── */
-.skill-track {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 2px;
-  overflow: hidden;
-}
 
 /* ─── Input fields ──────────────────────────────────── */
 .field {

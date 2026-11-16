@@ -75,7 +75,7 @@ run("AI & ML Skills",      "/skills/", ai_ml_skills)
 experience = [
     {
         "company":     "BrainyBeam Info-Tech Pvt. Ltd",
-        "role":        "MERN Stack Developer (Internship)",
+        "role":        "Web Design Intern (React JS)",
         "start_date":  "05/2024",
         "end_date":    "06/2024",
         "location":    "Ahmedabad, India",
@@ -84,7 +84,7 @@ experience = [
     },
     {
         "company":     "Cygner Technolabs Pvt. Ltd.",
-        "role":        "Frontend Developer (Training)",
+        "role":        "Web Development Trainee",
         "start_date":  "05/2023",
         "end_date":    "06/2023",
         "location":    "Rajkot, India",
@@ -112,29 +112,9 @@ education = [
         "location":    "Rajkot, India",
         "start_date":  "07/2021",
         "end_date":    "04/2025",
-        "grade":       "6.62 CGPA",
+        "grade":       "",
         "current":     False,
         "sort_order":  2
-    },
-    {
-        "degree":      "12th Grade (GSEB)",
-        "institution": "Premier School",
-        "location":    "Rajkot, India",
-        "start_date":  "06/2020",
-        "end_date":    "05/2021",
-        "grade":       "83%",
-        "current":     False,
-        "sort_order":  3
-    },
-    {
-        "degree":      "10th Grade (GSEB)",
-        "institution": "Atmiya School",
-        "location":    "Rajkot, India",
-        "start_date":  "06/2018",
-        "end_date":    "05/2019",
-        "grade":       "73.6%",
-        "current":     False,
-        "sort_order":  4
     },
 ]
 run("Education", "/education/", education, key="institution")
@@ -143,10 +123,11 @@ run("Education", "/education/", education, key="institution")
 certifications = [
     {"name": "CISCO CCNAv7: Introduction to Networks",              "pdf_url": "", "sort_order": 1},
     {"name": "CISCO CCNAv7: Switching, Routing & Wireless Essentials","pdf_url": "", "sort_order": 2},
-    {"name": "CISCO Operating System",                              "pdf_url": "", "sort_order": 3},
     {"name": "Programming for Everybody (Getting Started with Python)","pdf_url": "", "sort_order": 4},
     {"name": "Python Data Structures",                              "pdf_url": "", "sort_order": 5},
     {"name": "AWS Academy Cloud Foundations",                       "pdf_url": "", "sort_order": 6},
+    {"name": "TryHackMe Pre Security (2026)",                       "pdf_url": "", "sort_order": 7, "issuer": "TryHackMe", "issued_date": "2026"},
+    {"name": "NDG Linux Essentials (2023)",                         "pdf_url": "", "sort_order": 8, "issuer": "Cisco Networking Academy (NDG)", "issued_date": "2023"},
 ]
 run("Certifications", "/certifications/", certifications)
 

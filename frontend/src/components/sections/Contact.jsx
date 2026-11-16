@@ -1,6 +1,7 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { getProfile, BASE_URL } from '../../lib/api'
+import { BASE_URL } from '../../lib/api'
+import { useProfile } from '../../lib/store'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -26,11 +27,7 @@ const LinkedinIcon = () => (
 export default function Contact() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
-  const [profile, setProfile] = useState(null)
-
-  useEffect(() => {
-    getProfile().then(setProfile).catch(() => {})
-  }, [])
+  const profile = useProfile()
 
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState(null) // null | 'loading' | 'success' | 'error'
@@ -170,7 +167,7 @@ export default function Contact() {
           variants={fadeUp} custom={4} initial="hidden" animate={inView ? 'visible' : 'hidden'}
           className="lg:col-span-2 space-y-3"
         >
-          {profile?.email && (
+          {profile.email && (
             <a href={`mailto:${profile.email}`}
               className="glass rounded-2xl p-4 flex items-center gap-4 hover:border-[#64DCFF]/25 transition-all duration-200 group block"
             >
@@ -183,7 +180,7 @@ export default function Contact() {
               </div>
             </a>
           )}
-          {profile?.linkedin && (
+          {profile.linkedin && (
             <a href={profile.linkedin} target="_blank" rel="noopener noreferrer"
               className="glass rounded-2xl p-4 flex items-center gap-4 hover:border-[#64DCFF]/25 transition-all duration-200 group block"
             >

@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { getProjects } from '../../lib/api'
+import { useProjects } from '../../lib/store'
 
 const ExternalIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -108,11 +108,7 @@ function ProjectCard({ project, index, inView }) {
 export default function Projects() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
-  const [projects, setProjects] = useState([])
-
-  useEffect(() => {
-    getProjects().then(setProjects).catch(() => {})
-  }, [])
+  const projects = useProjects()
 
   return (
     <section id="projects" ref={ref} className="px-5 sm:px-8 lg:px-14 py-10 lg:py-12 border-t border-white/5">

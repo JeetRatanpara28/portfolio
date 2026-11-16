@@ -1,13 +1,8 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { getProfile } from "../../lib/api";
+import { useProfile } from "../../lib/store";
 
 export default function About() {
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    getProfile().then(setProfile).catch(() => {});
-  }, []);
+  const profile = useProfile(); // fallback data first, API data once it arrives
 
   return (
     <section id="about" className="px-5 sm:px-8 lg:px-14 pt-10 lg:pt-14 pb-10 lg:pb-12">
@@ -24,26 +19,26 @@ export default function About() {
 
         <div className="glass-strong rounded-2xl p-5 sm:p-6 space-y-4">
           <p className="text-slate-300 leading-relaxed text-sm">
-            {profile?.bio || "Loading…"}
+            {profile.bio}
           </p>
 
           <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-3 pt-2">
             <div className="glass rounded-xl p-4">
               <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Location</p>
-              <p className="text-sm text-slate-200 font-medium">{profile?.location || "—"}</p>
+              <p className="text-sm text-slate-200 font-medium">{profile.location}</p>
             </div>
             <div className="glass rounded-xl p-4">
               <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Status</p>
-              <p className="text-sm text-emerald-400 font-medium">{profile?.status || "—"}</p>
+              <p className="text-sm text-emerald-400 font-medium">{profile.status}</p>
             </div>
             <div className="glass rounded-xl p-4">
               <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Email</p>
-              <p className="text-sm text-slate-200 font-medium break-all">{profile?.email || "—"}</p>
+              <p className="text-sm text-slate-200 font-medium break-all">{profile.email}</p>
             </div>
             <div className="glass rounded-xl p-4">
               <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Focus</p>
               <p className="text-sm text-slate-200 font-medium">
-                {profile?.titles?.[0] || "—"}
+                {profile.titles[0]}
               </p>
             </div>
           </div>

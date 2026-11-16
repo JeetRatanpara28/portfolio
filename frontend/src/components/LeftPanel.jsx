@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThreeScene from "./ThreeScene";
-import { getProfile, BASE_URL } from "../lib/api";
+import { BASE_URL } from "../lib/api";
+import { useProfile } from "../lib/store";
 
 export const NAV = [
   { id: "about",    label: "About"    },
@@ -68,24 +69,13 @@ const EmailIcon = () => (
 
 /* ── Component ───────────────────────────────────────── */
 export default function LeftPanel({ activeSection, onNavClick }) {
-  const [profile, setProfile] = useState(null);
-  const [copied, setCopied]   = useState(false);
+  const profile = useProfile(); // fallback data first, API data once it arrives
+  const [copied, setCopied] = useState(false);
 
-  // Fetch profile from API on mount
-  useEffect(() => {
-    getProfile()
-      .then(setProfile)
-      .catch(() => {}); // silently fall back to defaults
-  }, []);
-
-  const title = useTypewriter(
-    profile?.titles || ["Full Stack Developer"],
-    70,
-    2200,
-  );
+  const title = useTypewriter(profile.titles, 70, 2200);
 
   const copyEmail = () => {
-    navigator.clipboard.writeText(profile?.email || "");
+    navigator.clipboard?.writeText(profile.email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2200);
   };
@@ -117,7 +107,7 @@ export default function LeftPanel({ activeSection, onNavClick }) {
 
           {/* Name */}
           <h1 className="font-display text-xl font-bold text-white mb-0.5 tracking-tight">
-            {profile?.name || "Jeet Ratanpara"}
+            {profile.name}
           </h1>
 
           {/* Animated title */}
@@ -127,7 +117,7 @@ export default function LeftPanel({ activeSection, onNavClick }) {
 
           {/* Location & status */}
           <p className="text-slate-500 text-xs mb-4 lg:mb-5 leading-relaxed">
-            {profile?.location || "Rajkot, India"} · {profile?.status || "Open to work"}
+            {profile.location} · {profile.status}
           </p>
 
           {/* Divider */}
@@ -171,15 +161,15 @@ export default function LeftPanel({ activeSection, onNavClick }) {
 
           {/* Social links */}
           <div className="flex items-center justify-center gap-2">
-            <a href={profile?.github || "#"} target="_blank" rel="noopener noreferrer" title="GitHub"
+            <a href={profile.github || "#"} target="_blank" rel="noopener noreferrer" title="GitHub"
               className="w-11 h-11 lg:w-9 lg:h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
               <GithubIcon />
             </a>
-            <a href={profile?.linkedin || "#"} target="_blank" rel="noopener noreferrer" title="LinkedIn"
+            <a href={profile.linkedin || "#"} target="_blank" rel="noopener noreferrer" title="LinkedIn"
               className="w-11 h-11 lg:w-9 lg:h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
               <LinkedinIcon />
             </a>
-            <a href={profile?.twitter || "#"} target="_blank" rel="noopener noreferrer" title="Twitter / X"
+            <a href={profile.twitter || "#"} target="_blank" rel="noopener noreferrer" title="Twitter / X"
               className="w-11 h-11 lg:w-9 lg:h-9 glass rounded-xl flex items-center justify-center text-slate-400 hover:text-[#64DCFF] transition-all duration-200">
               <TwitterIcon />
             </a>
@@ -190,7 +180,7 @@ export default function LeftPanel({ activeSection, onNavClick }) {
           </div>
 
           {/* Download Resume */}
-          {profile?.resume_exists && (
+          {profile.resume_exists && (
             <a
               href={`${BASE_URL}/resume/download`}
               download

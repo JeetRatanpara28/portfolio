@@ -1,29 +1,9 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { getSkills } from "../../lib/api";
+import { useSkillGroups } from "../../lib/store";
 
 // Colors assigned by position — matches your 5 groups
 const GROUP_COLORS = ["#61DAFB", "#68A063", "#336791", "#F97316", "#A78BFA"];
-
-function SkillBar({ name, level, color, delay, inView }) {
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-slate-300 text-sm font-body">{name}</span>
-        <span className="text-slate-500 text-xs font-mono">{level}%</span>
-      </div>
-      <div className="skill-track">
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: `linear-gradient(90deg, ${color}, ${color}66)` }}
-          initial={{ width: 0 }}
-          animate={inView ? { width: `${level}%` } : {}}
-          transition={{ duration: 1.1, delay, ease: [0.16, 1, 0.3, 1] }}
-        />
-      </div>
-    </div>
-  );
-}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -36,11 +16,7 @@ const fadeUp = {
 export default function Skills() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
-  const [groups, setGroups] = useState([]);
-
-  useEffect(() => {
-    getSkills().then(setGroups).catch(() => {});
-  }, []);
+  const groups = useSkillGroups(); // fallback data first, API data once it arrives
 
   return (
     <section id="skills" ref={ref} className="px-5 sm:px-8 lg:px-14 py-10 lg:py-12 border-t border-white/5">
@@ -58,8 +34,8 @@ export default function Skills() {
         What I work with
       </motion.h2>
 
-      {/* Skill groups */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+      {/* Skill groups — simple tags, no percentages */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
         {groups.map((group, gi) => {
           const color = GROUP_COLORS[gi % GROUP_COLORS.length];
           return (
@@ -78,16 +54,19 @@ export default function Skills() {
                 />
                 <span className="text-white text-sm font-semibold font-display">{group.name}</span>
               </div>
-              <div className="space-y-4">
-                {group.skills.map((skill, si) => (
-                  <SkillBar
-                    key={skill.id}
-                    name={skill.name}
-                    level={skill.level}
-                    color={color}
-                    delay={gi * 0.12 + si * 0.07}
-                    inView={inView}
-                  />
+              <div className="flex flex-wrap gap-2">
+                {group.skills.map((skill) => (
+                  <span
+                    key={skill.id ?? skill.name}
+                    className="text-xs font-medium px-3 py-1.5 rounded-full font-display"
+                    style={{
+                      background: `${color}14`,
+                      color: `${color}ee`,
+                      border: `1px solid ${color}33`,
+                    }}
+                  >
+                    {skill.name}
+                  </span>
                 ))}
               </div>
             </motion.div>

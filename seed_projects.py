@@ -9,7 +9,7 @@ BASE = "http://localhost:8000/api/projects/"
 projects = [
   {
     "title": "AgriSense AI",
-    "description": "AI-powered agricultural advisory platform for South Asian smallholder farmers. Features real-time pest risk assessment (Random Forest, 86.59% accuracy), irrigation recommendations (XGBoost, 99.78% accuracy), and crop advisory via FastAPI REST endpoints. Trained on 36,162 rows of NASA POWER weather data. Deployed on AWS EC2 with Docker and GitHub Actions CI/CD.",
+    "description": "AI-powered agricultural advisory platform for South Asian smallholder farmers. Features real-time pest risk assessment (Random Forest, 86.59% accuracy), irrigation recommendations (XGBoost, 99.78% accuracy), and crop advisory via FastAPI REST endpoints. Trained on 36,162 rows of NASA POWER weather data. Deployed on AWS EC2 with Docker and GitHub Actions CI/CD. Accuracy figures are evaluated on a held-out test set.",  # TODO: CONFIRM validation method
     "tech": ["Python", "FastAPI", "PostgreSQL", "Scikit-learn", "XGBoost", "TensorFlow", "Docker", "AWS EC2", "NASA POWER API"],
     "github_url": "https://github.com/Tejaswini3107/agrisenseai.git",
     "live_url": "",

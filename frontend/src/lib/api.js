@@ -1,39 +1,27 @@
 export const BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
-export async function getProfile() {
-  const [profile, resumeCheck] = await Promise.all([
-    fetch(`${BASE_URL}/profile/`).then(r => r.ok ? r.json() : null),
-    fetch(`${BASE_URL}/resume/exists`).then(r => r.ok ? r.json() : { exists: false }),
-  ])
-  return { ...profile, resume_exists: resumeCheck.exists }
-}
-
-export async function getSkills() {
-  const res = await fetch(`${BASE_URL}/skills/`)
-  if (!res.ok) throw new Error('Failed to fetch skills')
-  return res.json()
-}
-
-export async function getProjects() {
-  const res = await fetch(`${BASE_URL}/projects/`)
-  if (!res.ok) throw new Error('Failed to fetch projects')
-  return res.json()
-}
-
-export async function getExperience() {
-  const res = await fetch(`${BASE_URL}/experience/`)
-  if (!res.ok) throw new Error('Failed to fetch experience')
-  return res.json()
-}
-
-export async function getEducation() {
-  const res = await fetch(`${BASE_URL}/education/`)
-  if (!res.ok) throw new Error('Failed to fetch education')
-  return res.json()
-}
-
-export async function getCertifications() {
-  const res = await fetch(`${BASE_URL}/certifications/`)
-  if (!res.ok) throw new Error('Failed to fetch certifications')
-  return res.json()
+/**
+ * GET a JSON endpoint without ever hanging the page.
+ *  - 1st try gives up after 3 s (the page is already showing fallback data, so nobody waits)
+ *  - network errors, timeouts and 5xx get ONE quiet retry with a longer limit, because a
+ *    serverless cold start is usually warm by then
+ *  - 4xx (e.g. no profile yet) fail immediately: retrying won't help
+ */
+export async function fetchJSON(path, timeouts = [3000, 10000]) {
+  let lastError
+  for (const ms of timeouts) {
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), ms)
+    try {
+      const res = await fetch(`${BASE_URL}${path}`, { signal: ctrl.signal })
+      if (res.ok) return await res.json()
+      lastError = new Error(`${path} → ${res.status}`)
+      if (res.status < 500) break
+    } catch (e) {
+      lastError = e
+    } finally {
+      clearTimeout(timer)
+    }
+  }
+  throw lastError
 }
