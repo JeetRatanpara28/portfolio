@@ -1,26 +1,28 @@
-import { auth } from './auth'
+export const BASE = import.meta.env.VITE_API_URL || '/api'
 
-const BASE = '/api'
+// Admin key: asked once, kept in this browser's localStorage.
+const KEY_NAME = 'admin_key'
+const getKey = () => { try { return localStorage.getItem(KEY_NAME) || '' } catch { return '' } }
+const setKey = (k) => { try { localStorage.setItem(KEY_NAME, k) } catch {} }
+export const adminHeaders = () => (getKey() ? { 'X-Admin-Key': getKey() } : {})
 
-function headers() {
-  const token = auth.getToken()
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+// fetch() that asks for the key once if the server answers 401, then retries.
+export async function authFetch(url, opts = {}) {
+  const send = () => fetch(url, { ...opts, headers: { ...(opts.headers || {}), ...adminHeaders() } })
+  let res = await send()
+  if (res.status === 401) {
+    const k = window.prompt('Enter admin key')
+    if (k) { setKey(k.trim()); res = await send() }
   }
+  return res
 }
 
 async function request(method, path, body) {
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await authFetch(`${BASE}${path}`, {
     method,
-    headers: headers(),
+    headers: { 'Content-Type': 'application/json' },
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
   })
-  if (res.status === 401) {
-    auth.clearToken()
-    window.location.href = '/login'
-    return
-  }
   if (!res.ok) {
     let detail = `${method} ${path} → ${res.status}`
     try { const b = await res.json(); if (b.detail) detail += `: ${b.detail}` } catch {}
@@ -31,12 +33,6 @@ async function request(method, path, body) {
 }
 
 export const api = {
-  // Auth
-  login: (username, password) =>
-    request('POST', '/auth/login', { username, password }),
-  changePassword: (current_password, new_password) =>
-    request('PUT', '/auth/change-password', { current_password, new_password }),
-
   // Profile
   getProfile:    ()       => request('GET',  '/profile/'),
   updateProfile: (data)   => request('PUT',  '/profile/', data),
@@ -74,33 +70,4 @@ export const api = {
   updateCertification:  (id, d) => request('PUT',  `/certifications/${id}`, d),
   deleteCertification:  (id)    => request('DELETE', `/certifications/${id}`),
 
-  // WebAuthn / Passkeys
-  webauthnHasCredential: (username)       => request('GET',  `/auth/webauthn/has-credential/${username}`),
-  webauthnRegisterBegin: (username)       => request('POST', '/auth/webauthn/register/begin', { username }),
-  webauthnRegisterComplete: (username, credential) =>
-    request('POST', '/auth/webauthn/register/complete', { username, credential }),
-  webauthnLoginBegin:    (username)       => request('POST', '/auth/webauthn/login/begin', { username }),
-  webauthnLoginComplete: (username, credential) =>
-    request('POST', '/auth/webauthn/login/complete', { username, credential }),
-
-  // WebAuthn with explicit token — used during first-time setup inside the login flow
-  // (the permanent token isn't stored yet at this point)
-  webauthnRegisterBeginWithToken: (token, username) =>
-    _requestWithToken(token, 'POST', '/auth/webauthn/register/begin', { username }),
-  webauthnRegisterCompleteWithToken: (token, username, credential) =>
-    _requestWithToken(token, 'POST', '/auth/webauthn/register/complete', { username, credential }),
-}
-
-async function _requestWithToken(token, method, path, body) {
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
-  })
-  if (!res.ok) {
-    let detail = `${method} ${path} → ${res.status}`
-    try { const b = await res.json(); if (b.detail) detail += `: ${b.detail}` } catch {}
-    throw new Error(detail)
-  }
-  return res.json()
 }

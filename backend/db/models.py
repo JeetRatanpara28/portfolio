@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ARRAY, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Boolean, ARRAY, ForeignKey, LargeBinary
 from db.database import Base
 
 class Profile(Base):
@@ -87,19 +87,9 @@ class Certification(Base):
     pdf_url        = Column(String(500))
     sort_order     = Column(Integer, default=0)
 
-class AdminUser(Base):
-    __tablename__ = "admin_users"
 
-    id            = Column(Integer, primary_key=True, index=True)
-    username      = Column(String(200), nullable=False, unique=True)
-    password_hash = Column(String(500), nullable=False)
-
-
-class WebAuthnCredential(Base):
-    __tablename__ = "webauthn_credentials"
-
-    id            = Column(Integer, primary_key=True, index=True)
-    username      = Column(String(200), nullable=False, index=True)
-    credential_id = Column(String(500), nullable=False, unique=True)
-    public_key    = Column(String(2000), nullable=False)
-    sign_count    = Column(Integer, default=0)
+class ResumeFile(Base):
+    """Single-row table holding the resume PDF (Vercel has no writable disk)."""
+    __tablename__ = "resume_file"
+    id = Column(Integer, primary_key=True)
+    content = Column(LargeBinary, nullable=False)

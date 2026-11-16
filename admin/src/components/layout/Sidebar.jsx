@@ -1,9 +1,8 @@
-import { NavLink, useNavigate } from 'react-router-dom'
-import { auth } from '@/lib/auth'
+import { NavLink } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard, User, Wrench, FolderKanban,
-  Briefcase, GraduationCap, Award, LogOut, Settings,
+  Briefcase, GraduationCap, Award,
 } from 'lucide-react'
 
 const NAV = [
@@ -14,17 +13,9 @@ const NAV = [
   { to: '/experience',     icon: Briefcase,       label: 'Experience'      },
   { to: '/education',      icon: GraduationCap,   label: 'Education'       },
   { to: '/certifications', icon: Award,           label: 'Certifications'  },
-  { to: '/settings',       icon: Settings,        label: 'Settings'        },
 ]
 
 export default function Sidebar() {
-  const navigate = useNavigate()
-
-  const logout = () => {
-    auth.clearToken()
-    navigate('/login')
-  }
-
   return (
     <aside className="w-60 flex-shrink-0 flex flex-col h-screen bg-sidebar border-r border-sidebar-border">
       {/* Logo */}
@@ -56,16 +47,6 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* Logout */}
-      <div className="p-3 border-t border-sidebar-border">
-        <button
-          onClick={logout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-sidebar-foreground/60 hover:text-red-400 hover:bg-sidebar-accent/50 transition-colors"
-        >
-          <LogOut size={16} />
-          Logout
-        </button>
-      </div>
     </aside>
   )
 }

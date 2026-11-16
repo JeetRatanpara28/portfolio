@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { getExperience, getEducation, getCertifications, getProfile } from "../../lib/api";
+import { getExperience, getEducation, getCertifications, getProfile, BASE_URL } from "../../lib/api";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -93,7 +93,7 @@ export default function Resume() {
     getExperience().then(setExperience).catch(() => {});
     getEducation().then(setEducation).catch(() => {});
     getCertifications().then(setCerts).catch(() => {});
-    getProfile().then(p => setResumeUrl(p?.resume_exists ? '/api/resume/download' : null)).catch(() => {});
+    getProfile().then(p => setResumeUrl(p?.resume_exists ? `${BASE_URL}/resume/download` : null)).catch(() => {});
   }, []);
 
   return (

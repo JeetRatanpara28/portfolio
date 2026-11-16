@@ -13,17 +13,6 @@ conn = psycopg2.connect(DATABASE_URL)
 cur = conn.cursor()
 
 migrations = [
-    # WebAuthn credentials table
-    """
-    CREATE TABLE IF NOT EXISTS webauthn_credentials (
-        id            SERIAL PRIMARY KEY,
-        username      VARCHAR(200) NOT NULL,
-        credential_id VARCHAR(500) NOT NULL UNIQUE,
-        public_key    VARCHAR(2000) NOT NULL,
-        sign_count    INTEGER DEFAULT 0
-    )
-    """,
-    "CREATE INDEX IF NOT EXISTS idx_webauthn_username ON webauthn_credentials(username)",
     # Experience — add current flag
     "ALTER TABLE experience ADD COLUMN IF NOT EXISTS current BOOLEAN DEFAULT FALSE",
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThreeScene from "./ThreeScene";
-import { getProfile } from "../lib/api";
+import { getProfile, BASE_URL } from "../lib/api";
 
 const NAV = [
   { id: "about",    label: "About"    },
@@ -192,7 +192,7 @@ export default function LeftPanel({ activeSection, onNavClick }) {
           {/* Download Resume */}
           {profile?.resume_exists && (
             <a
-              href="/api/resume/download"
+              href={`${BASE_URL}/resume/download`}
               download
               className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold font-display transition-all duration-200"
               style={{

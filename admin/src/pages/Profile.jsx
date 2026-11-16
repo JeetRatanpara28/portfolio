@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { api } from '@/lib/api'
+import { api, BASE, authFetch } from '@/lib/api'
 import { toast } from 'sonner'
 import { Field, inputCls, textareaCls } from '@/components/ui/Field'
 import { Plus, X, Upload, FileText, CheckCircle } from 'lucide-react'
@@ -23,7 +23,7 @@ export default function Profile() {
       .then(data => setForm({ ...EMPTY, ...data, titles: data.titles || [] }))
       .catch(() => toast.error('Failed to load profile'))
       .finally(() => setLoading(false))
-    fetch('/api/resume/exists').then(r => r.json()).then(d => setResumeExists(d.exists)).catch(() => {})
+    fetch(`${BASE}/resume/exists`).then(r => r.json()).then(d => setResumeExists(d.exists)).catch(() => {})
   }, [])
 
   const uploadResume = async (e) => {
@@ -34,10 +34,8 @@ export default function Profile() {
     try {
       const fd = new FormData()
       fd.append('file', file)
-      const token = localStorage.getItem('admin_token')
-      const res = await fetch('/api/resume/upload', {
+      const res = await authFetch(`${BASE}/resume/upload`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
         body: fd,
       })
       if (!res.ok) throw new Error('Upload failed')
@@ -115,7 +113,7 @@ export default function Profile() {
               <div className="flex items-center gap-2 text-sm text-green-600">
                 <CheckCircle size={15} />
                 <span>Resume uploaded</span>
-                <a href="/api/resume/download" target="_blank"
+                <a href={`${BASE}/resume/download`} target="_blank"
                   className="text-xs underline text-muted-foreground hover:text-foreground">preview</a>
               </div>
             )}

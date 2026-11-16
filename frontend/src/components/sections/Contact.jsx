@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { getProfile } from '../../lib/api'
+import { getProfile, BASE_URL } from '../../lib/api'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -42,7 +42,7 @@ export default function Contact() {
     if (!form.name || !form.email || !form.message) return
     setStatus('loading')
     try {
-      const res = await fetch('/api/contact/', {
+      const res = await fetch(`${BASE_URL}/contact/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

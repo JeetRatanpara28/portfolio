@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from db.database import get_db
 from db.models import Profile
 from schemas.profile import ProfileUpdate, ProfileResponse
-from core.security import verify_token
 
 router = APIRouter(prefix="/api/profile", tags=["profile"])
 
@@ -16,7 +15,7 @@ def get_profile(db: Session = Depends(get_db)):
     return profile
 
 @router.put("/", response_model=ProfileResponse)
-def update_profile(data: ProfileUpdate, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def update_profile(data: ProfileUpdate, db: Session = Depends(get_db)):
     profile = db.query(Profile).first()
     if not profile:
         profile = Profile(**data.model_dump(exclude_none=True))

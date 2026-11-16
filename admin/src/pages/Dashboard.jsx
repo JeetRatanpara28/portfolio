@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { api } from '@/lib/api'
-import { FolderKanban, Wrench, Briefcase, GraduationCap, Award, ExternalLink, Fingerprint, X } from 'lucide-react'
+import { api, BASE } from '@/lib/api'
+import { FolderKanban, Wrench, Briefcase, GraduationCap, Award, ExternalLink } from 'lucide-react'
 
 function StatCard({ icon: Icon, label, value, color }) {
   return (
@@ -18,14 +17,9 @@ function StatCard({ icon: Icon, label, value, color }) {
 }
 
 export default function Dashboard() {
-  const [stats, setStats]           = useState({})
-  const [showBioBanner, setShowBio] = useState(false)
+  const [stats, setStats] = useState({})
 
   useEffect(() => {
-    api.webauthnHasCredential('jeet')
-      .then(({ has_credential }) => setShowBio(!has_credential))
-      .catch(() => {})
-
     Promise.all([
       api.getProjects(),
       api.getSkills(),
@@ -50,24 +44,6 @@ export default function Dashboard() {
         <p className="text-sm text-muted-foreground mt-1">Overview of your portfolio content</p>
       </div>
 
-      {/* Touch ID setup banner */}
-      {showBioBanner && (
-        <div className="mb-6 flex items-center gap-4 bg-primary/5 border border-primary/20 rounded-xl px-5 py-3.5">
-          <Fingerprint size={18} className="text-primary flex-shrink-0" />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground">Set up Touch ID / Face ID login</p>
-            <p className="text-xs text-muted-foreground">Add biometric authentication for instant, secure access.</p>
-          </div>
-          <Link to="/setup-biometric"
-            className="text-xs font-medium text-primary hover:underline flex-shrink-0">
-            Set up →
-          </Link>
-          <button onClick={() => setShowBio(false)} className="text-muted-foreground hover:text-foreground flex-shrink-0">
-            <X size={14} />
-          </button>
-        </div>
-      )}
-
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
         <StatCard icon={FolderKanban} label="Projects"       value={stats.projects}   color="bg-blue-50 text-blue-600" />
         <StatCard icon={Wrench}       label="Skills"         value={stats.skills}     color="bg-purple-50 text-purple-600" />
@@ -83,9 +59,9 @@ export default function Dashboard() {
             className="flex items-center gap-2 text-sm text-blue-600 hover:underline">
             <ExternalLink size={14} /> View portfolio (localhost:3000)
           </a>
-          <a href="http://localhost:8000/api/docs" target="_blank" rel="noopener noreferrer"
+          <a href={`${BASE}/docs`} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-blue-600 hover:underline">
-            <ExternalLink size={14} /> API docs (localhost:8000/api/docs)
+            <ExternalLink size={14} /> API docs
           </a>
         </div>
       </div>

@@ -1,11 +1,8 @@
-import { Outlet, Navigate } from 'react-router-dom'
-import { auth } from '@/lib/auth'
+import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import { Toaster } from 'sonner'
 
 export default function Layout() {
-  if (!auth.isLoggedIn()) return <Navigate to="/login" replace />
-
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       <Sidebar />

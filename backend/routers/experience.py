@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from core.security import verify_token
 from sqlalchemy.orm import Session
 
 from db.database import get_db
@@ -13,7 +12,7 @@ def get_experience(db: Session = Depends(get_db)):
     return db.query(Experience).order_by(Experience.sort_order).all()
 
 @router.post("/", response_model=ExperienceResponse)
-def create_experience(data: ExperienceCreate, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def create_experience(data: ExperienceCreate, db: Session = Depends(get_db)):
     exp = Experience(**data.model_dump())
     db.add(exp)
     db.commit()
@@ -21,7 +20,7 @@ def create_experience(data: ExperienceCreate, db: Session = Depends(get_db), _: 
     return exp
 
 @router.put("/{exp_id}", response_model=ExperienceResponse)
-def update_experience(exp_id: int, data: ExperienceCreate, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def update_experience(exp_id: int, data: ExperienceCreate, db: Session = Depends(get_db)):
     exp = db.query(Experience).filter(Experience.id == exp_id).first()
     if not exp:
         raise HTTPException(status_code=404, detail="Experience not found")
@@ -32,7 +31,7 @@ def update_experience(exp_id: int, data: ExperienceCreate, db: Session = Depends
     return exp
 
 @router.delete("/{exp_id}")
-def delete_experience(exp_id: int, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def delete_experience(exp_id: int, db: Session = Depends(get_db)):
     exp = db.query(Experience).filter(Experience.id == exp_id).first()
     if not exp:
         raise HTTPException(status_code=404, detail="Experience not found")

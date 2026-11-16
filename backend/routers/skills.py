@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from core.security import verify_token
 from sqlalchemy.orm import Session
 
 from db.database import get_db
@@ -21,7 +20,7 @@ def get_skills(db: Session = Depends(get_db)):
     return groups
 
 @router.post("/groups", response_model=SkillGroupResponse)
-def create_group(data: SkillGroupCreate, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def create_group(data: SkillGroupCreate, db: Session = Depends(get_db)):
     group = SkillGroup(**data.model_dump())
     db.add(group)
     db.commit()
@@ -29,7 +28,7 @@ def create_group(data: SkillGroupCreate, db: Session = Depends(get_db), _: str =
     return group
 
 @router.post("/", response_model=SkillResponse)
-def create_skill(data: SkillCreate, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def create_skill(data: SkillCreate, db: Session = Depends(get_db)):
     skill = Skill(**data.model_dump())
     db.add(skill)
     db.commit()
@@ -37,7 +36,7 @@ def create_skill(data: SkillCreate, db: Session = Depends(get_db), _: str = Depe
     return skill
 
 @router.put("/{skill_id}", response_model=SkillResponse)
-def update_skill(skill_id: int, data: SkillCreate, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def update_skill(skill_id: int, data: SkillCreate, db: Session = Depends(get_db)):
     skill = db.query(Skill).filter(Skill.id == skill_id).first()
     if not skill:
         raise HTTPException(status_code=404, detail="Skill not found")
@@ -48,7 +47,7 @@ def update_skill(skill_id: int, data: SkillCreate, db: Session = Depends(get_db)
     return skill
 
 @router.delete("/{skill_id}")
-def delete_skill(skill_id: int, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def delete_skill(skill_id: int, db: Session = Depends(get_db)):
     skill = db.query(Skill).filter(Skill.id == skill_id).first()
     if not skill:
         raise HTTPException(status_code=404, detail="Skill not found")
@@ -57,7 +56,7 @@ def delete_skill(skill_id: int, db: Session = Depends(get_db), _: str = Depends(
     return {"success": True}
 
 @router.put("/groups/{group_id}", response_model=SkillGroupResponse)
-def update_group(group_id: int, data: SkillGroupCreate, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def update_group(group_id: int, data: SkillGroupCreate, db: Session = Depends(get_db)):
     group = db.query(SkillGroup).filter(SkillGroup.id == group_id).first()
     if not group:
         raise HTTPException(status_code=404, detail="Group not found")
@@ -68,7 +67,7 @@ def update_group(group_id: int, data: SkillGroupCreate, db: Session = Depends(ge
     return group
 
 @router.delete("/groups/{group_id}")
-def delete_group(group_id: int, db: Session = Depends(get_db), _: str = Depends(verify_token)):
+def delete_group(group_id: int, db: Session = Depends(get_db)):
     group = db.query(SkillGroup).filter(SkillGroup.id == group_id).first()
     if not group:
         raise HTTPException(status_code=404, detail="Group not found")
