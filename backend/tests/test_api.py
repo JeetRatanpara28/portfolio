@@ -87,3 +87,13 @@ def test_resume_upload_download_roundtrip(client):
     assert r.status_code == 200
     assert client.get("/api/resume/exists").json() == {"exists": True}
     assert client.get("/api/resume/download").content == pdf
+
+
+def test_401_still_carries_cors_headers(client, monkeypatch):
+    """Browser must be able to read the 401, otherwise the admin can't ask for the key."""
+    import main
+    monkeypatch.setattr(main, "ADMIN_KEY", "secret123")
+    origin = main.ALLOWED_ORIGINS[0]
+    r = client.put("/api/profile/", json={}, headers={"Origin": origin})
+    assert r.status_code == 401
+    assert r.headers.get("access-control-allow-origin") == origin

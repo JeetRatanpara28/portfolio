@@ -50,13 +50,6 @@ ALLOWED_ORIGINS = [
     if o.strip().strip("\"'")
 ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # ── Admin key: protects every write (POST/PUT/DELETE) ────
 # If ADMIN_KEY is unset (local dev, tests) writes stay open.
@@ -88,6 +81,16 @@ async def security_headers(request: Request, call_next):
     if request.url.scheme == "https":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
+
+# CORS must be added LAST: the last middleware added is the outermost one, so even
+# error responses from the guards above (e.g. 401) get CORS headers and the browser can read them.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ── Routers ─────────────────────────────────────────────
 app.include_router(profile.router)
