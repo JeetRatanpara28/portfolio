@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ARRAY, ForeignKey, LargeBinary
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, Text, Boolean, ARRAY, ForeignKey, LargeBinary, DateTime
 from db.database import Base
 
 class Profile(Base):
@@ -93,3 +94,14 @@ class ResumeFile(Base):
     __tablename__ = "resume_file"
     id = Column(Integer, primary_key=True)
     content = Column(LargeBinary, nullable=False)
+
+
+class Passkey(Base):
+    """A registered device (Touch ID / Face ID). Only the PUBLIC key is stored."""
+    __tablename__ = "passkeys"
+    id = Column(Integer, primary_key=True)
+    credential_id = Column(String, unique=True, nullable=False)   # base64url
+    public_key = Column(LargeBinary, nullable=False)
+    sign_count = Column(Integer, nullable=False, default=0)
+    label = Column(String, nullable=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)

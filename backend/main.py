@@ -15,10 +15,12 @@ from slowapi.errors import RateLimitExceeded
 from core.limiter import limiter
 from dotenv import load_dotenv
 
+from core import tokens
+from core.config import ALLOWED_ORIGINS, admin_key
 from db.database import engine
 from db.models import Base
 
-from routers import profile, skills, projects, experience, education, certifications, contact, resume
+from routers import profile, skills, projects, experience, education, certifications, contact, resume, webauthn_routes
 
 load_dotenv()
 
@@ -42,30 +44,27 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# ── CORS ────────────────────────────────────────────────
-# Tolerate stray spaces, quotes, newlines and trailing slashes in the env value.
-ALLOWED_ORIGINS = [
-    o.strip().strip("\"'").rstrip("/")
-    for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001").split(",")
-    if o.strip().strip("\"'")
-]
-
-
-# ── Admin key: protects every write (POST/PUT/DELETE) ────
-# If ADMIN_KEY is unset (local dev, tests) writes stay open.
-# The public contact form is the only write exempt from the key.
-ADMIN_KEY = os.getenv("ADMIN_KEY", "")
+# ── Write guard ──────────────────────────────────────────
+# Every write (POST/PUT/DELETE) needs either:
+#   * X-Admin-Token  – a short-lived token the server hands out after a Touch ID / Face ID check, or
+#   * X-Admin-Key    – the ADMIN_KEY itself (scripts / recovery)
+# Open writes: the public contact form, and the /api/webauthn/* routes (they check for themselves).
+# If ADMIN_KEY is unset (local dev, tests) everything stays open.
 PUBLIC_WRITES = {"/api/contact", "/api/contact/"}
 
 @app.middleware("http")
-async def admin_key_guard(request: Request, call_next):
+async def write_guard(request: Request, call_next):
+    key = admin_key()
     if (
-        ADMIN_KEY
+        key
         and request.method not in ("GET", "HEAD", "OPTIONS")
         and request.url.path not in PUBLIC_WRITES
-        and not hmac.compare_digest(request.headers.get("x-admin-key", ""), ADMIN_KEY)
+        and not request.url.path.startswith("/api/webauthn/")
     ):
-        return JSONResponse({"detail": "Invalid or missing admin key"}, status_code=401)
+        token_ok = tokens.verify(request.headers.get("x-admin-token", ""), "write") is not None
+        key_ok = hmac.compare_digest(request.headers.get("x-admin-key", ""), key)
+        if not (token_ok or key_ok):
+            return JSONResponse({"detail": "Passkey check required"}, status_code=401)
     return await call_next(request)
 
 # ── Security headers middleware ──────────────────────────
@@ -101,6 +100,7 @@ app.include_router(education.router)
 app.include_router(certifications.router)
 app.include_router(contact.router)
 app.include_router(resume.router)
+app.include_router(webauthn_routes.router)
 
 # ── Health ──────────────────────────────────────────────
 @app.get("/api/health", tags=["system"])

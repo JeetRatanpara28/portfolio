@@ -1,20 +1,72 @@
+import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
+
 export const BASE = import.meta.env.VITE_API_URL || '/api'
 
-// Admin key: asked once, kept in this browser's localStorage.
-const KEY_NAME = 'admin_key'
-const getKey = () => { try { return localStorage.getItem(KEY_NAME) || '' } catch { return '' } }
-const setKey = (k) => { try { localStorage.setItem(KEY_NAME, k) } catch {} }
-export const adminHeaders = () => (getKey() ? { 'X-Admin-Key': getKey() } : {})
+// ── Passkey (Touch ID / Face ID) protection ──────────────
+// Reads are public. Every write first asks the device for a biometric check; the server
+// answers with a short-lived token that is sent along with the write.
+class NeedsSetup extends Error {}
 
-// fetch() that asks for the key once if the server answers 401, then retries.
+async function postJSON(path, body, headers = {}) {
+  return fetch(`${BASE}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...headers },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  })
+}
+
+function friendly(e) {
+  // The user dismissed the Touch ID / Face ID sheet
+  if (e?.name === 'NotAllowedError' || e?.name === 'AbortError') return new Error('Cancelled — fingerprint / face check not completed')
+  return e
+}
+
+// Ask the device to prove it's you; returns a write token.
+async function getWriteToken() {
+  const o = await postJSON('/webauthn/auth/options')
+  if (o.status === 409) throw new NeedsSetup()
+  if (!o.ok) throw new Error('Could not start the security check')
+  const { options, state } = await o.json()
+  let credential
+  try { credential = await startAuthentication({ optionsJSON: options }) } catch (e) { throw friendly(e) }
+  const v = await postJSON('/webauthn/auth/verify', { credential, state })
+  if (!v.ok) throw new Error('Security check failed')
+  return (await v.json()).token
+}
+
+// Add THIS device (Mac Touch ID / iPhone Face ID). Needs the admin key once.
+export async function registerDevice() {
+  const key = window.prompt('Admin key (needed once to add this device)')
+  if (!key) throw new Error('Cancelled')
+  const h = { 'X-Admin-Key': key.trim() }
+  const o = await postJSON('/webauthn/register/options', undefined, h)
+  if (o.status === 401) throw new Error('Wrong admin key')
+  if (!o.ok) throw new Error('Could not start device setup')
+  const { options, state } = await o.json()
+  let credential
+  try { credential = await startRegistration({ optionsJSON: options }) } catch (e) { throw friendly(e) }
+  const v = await postJSON('/webauthn/register/verify', { credential, state, label: navigator.platform || 'device' }, h)
+  if (v.status === 409) throw new Error('This device is already added')
+  if (!v.ok) throw new Error('Could not add this device')
+}
+
+// fetch() for writes: biometric check first, then the real request with the token.
 export async function authFetch(url, opts = {}) {
-  const send = () => fetch(url, { ...opts, headers: { ...(opts.headers || {}), ...adminHeaders() } })
-  let res = await send()
-  if (res.status === 401) {
-    const k = window.prompt('Enter admin key')
-    if (k) { setKey(k.trim()); res = await send() }
+  const method = (opts.method || 'GET').toUpperCase()
+  if (method === 'GET' || method === 'HEAD') return fetch(url, opts)
+
+  let token
+  try {
+    token = await getWriteToken()
+  } catch (e) {
+    if (!(e instanceof NeedsSetup)) throw e
+    if (!window.confirm('No device is set up yet.\n\nSet up this device now with Touch ID / Face ID?')) {
+      throw new Error('Cancelled — no device set up')
+    }
+    await registerDevice()
+    token = await getWriteToken()
   }
-  return res
+  return fetch(url, { ...opts, headers: { ...(opts.headers || {}), 'X-Admin-Token': token } })
 }
 
 async function request(method, path, body) {

@@ -1,8 +1,10 @@
 import { NavLink } from 'react-router-dom'
+import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { registerDevice } from '@/lib/api'
 import {
   LayoutDashboard, User, Wrench, FolderKanban,
-  Briefcase, GraduationCap, Award,
+  Briefcase, GraduationCap, Award, Fingerprint,
 } from 'lucide-react'
 
 const NAV = [
@@ -47,6 +49,20 @@ export default function Sidebar() {
         ))}
       </nav>
 
+      {/* Add this device (Touch ID / Face ID) */}
+      <div className="p-3 border-t border-sidebar-border">
+        <button
+          onClick={() =>
+            registerDevice()
+              .then(() => toast.success('This device is set up — saves will now ask for Touch ID / Face ID'))
+              .catch(e => toast.error(e.message))
+          }
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors"
+        >
+          <Fingerprint size={16} />
+          Add this device
+        </button>
+      </div>
     </aside>
   )
 }

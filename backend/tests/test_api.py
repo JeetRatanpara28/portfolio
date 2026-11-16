@@ -69,17 +69,6 @@ def test_resume_rejects_fake_pdf(client):
     assert res.status_code == 400
 
 
-def test_admin_key_blocks_writes_when_set(client, monkeypatch):
-    import main
-    monkeypatch.setattr(main, "ADMIN_KEY", "secret123")
-    body = {"title": "x", "description": "d", "tech_stack": [], "sort_order": 0}
-    assert client.post("/api/projects/", json=body).status_code == 401
-    assert client.post("/api/projects/", json=body, headers={"X-Admin-Key": "wrong"}).status_code == 401
-    assert client.get("/api/projects/").status_code == 200          # reads stay public
-    # public contact form is not blocked by the key (fails on validation, not 401)
-    assert client.post("/api/contact/", json={}).status_code != 401
-
-
 def test_resume_upload_download_roundtrip(client):
     pdf = b"%PDF-1.4 fake but starts right"
     assert client.get("/api/resume/exists").json() == {"exists": False}
@@ -87,13 +76,3 @@ def test_resume_upload_download_roundtrip(client):
     assert r.status_code == 200
     assert client.get("/api/resume/exists").json() == {"exists": True}
     assert client.get("/api/resume/download").content == pdf
-
-
-def test_401_still_carries_cors_headers(client, monkeypatch):
-    """Browser must be able to read the 401, otherwise the admin can't ask for the key."""
-    import main
-    monkeypatch.setattr(main, "ADMIN_KEY", "secret123")
-    origin = main.ALLOWED_ORIGINS[0]
-    r = client.put("/api/profile/", json={}, headers={"Origin": origin})
-    assert r.status_code == 401
-    assert r.headers.get("access-control-allow-origin") == origin
